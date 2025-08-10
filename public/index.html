@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مصوغات الراجح</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fcfbf7;
+            margin: 0;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+        }
+        header {
+            text-align: center;
+            background-color: #fff;
+            padding: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        .logo {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #d4af37;
+        }
+        nav {
+            margin-top: 10px;
+        }
+        nav a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: #555;
+            font-weight: bold;
+        }
+        .lang-switcher {
+            text-align: left;
+            padding: 10px;
+        }
+        .section-title {
+            text-align: center;
+            margin: 40px 0 20px;
+            font-size: 2em;
+            color: #d4af37;
+        }
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .product-card {
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .product-card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+        .product-details {
+            margin-top: 10px;
+        }
+        .gold-prices, .currency-rates {
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        table, th, td {
+            border: 1px solid #e0e0e0;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #d4af37;
+            color: #fff;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #333;
+            color: #fff;
+            margin-top: 40px;
+        }
+        .footer-links a {
+            color: #d4af37;
+            margin: 0 10px;
+            text-decoration: none;
+        }
+        .filters {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="lang-switcher">
+        <select id="langSwitcher">
+            <option value="ar">العربية</option>
+            <option value="en">English</option>
+            <option value="tr">Türkçe</option>
+        </select>
+    </div>
+    <header>
+        <div class="logo">مصوغات الراجح</div>
+        <nav>
+            <a href="#home" data-translate="nav-home">الرئيسية</a>
+            <a href="#new-gold" data-translate="nav-new">ذهب جديد</a>
+            <a href="#used-gold" data-translate="nav-used">ذهب مستعمل</a>
+            <a href="#gold-price-section" data-translate="nav-gold-price">سعر الذهب</a>
+            <a href="#currency-price-section" data-translate="nav-currency-price">تصريف العملات</a>
+        </nav>
+    </header>
+    <div class="container">
+        <section id="new-gold">
+            <h2 class="section-title" data-translate="new-gold-title">أحدث قطع الذهب</h2>
+            <div class="filters">
+                <input type="text" id="newGoldSearch" placeholder="بحث..." data-translate-placeholder="search-placeholder">
+                <select id="newGoldCaratFilter">
+                    <option value="" data-translate="all-carats">جميع العيارات</option>
+                    <option value="21">عيار 21</option>
+                    <option value="22">عيار 22</option>
+                </select>
+                <select id="newGoldSort">
+                    <option value="default" data-translate="sort-default">الترتيب الافتراضي</option>
+                    <option value="price-asc" data-translate="sort-price-asc">الأقل سعراً</option>
+                    <option value="price-desc" data-translate="sort-price-desc">الأعلى سعراً</option>
+                </select>
+            </div>
+            <div id="newGoldProducts" class="products-grid"></div>
+        </section>
+        <section id="used-gold">
+            <h2 class="section-title" data-translate="used-gold-title">الذهب المستعمل</h2>
+            <div class="filters">
+                <input type="text" id="usedGoldSearch" placeholder="بحث..." data-translate-placeholder="search-placeholder">
+                <select id="usedGoldCaratFilter">
+                    <option value="" data-translate="all-carats">جميع العيارات</option>
+                    <option value="21">عيار 21</option>
+                    <option value="22">عيار 22</option>
+                </select>
+                <select id="usedGoldSort">
+                    <option value="default" data-translate="sort-default">الترتيب الافتراضي</option>
+                    <option value="price-asc" data-translate="sort-price-asc">الأقل سعراً</option>
+                    <option value="price-desc" data-translate="sort-price-desc">الأعلى سعراً</option>
+                </select>
+            </div>
+            <div id="usedGoldProducts" class="products-grid"></div>
+        </section>
+        <section id="gold-price-section">
+            <h2 class="section-title" data-translate="gold-price-title">سعر الذهب</h2>
+            <div class="gold-prices">
+                <h3 data-translate="gold-carat-prices">أسعار عيار الذهب</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th data-translate="carat">العيار</th>
+                            <th data-translate="buy-price">سعر الشراء</th>
+                            <th data-translate="sell-price">سعر البيع</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>عيار 21</td>
+                            <td id="gold21Buy">--</td>
+                            <td id="gold21Sell">--</td>
+                        </tr>
+                        <tr>
+                            <td>عيار 22</td>
+                            <td id="gold22Buy">--</td>
+                            <td id="gold22Sell">--</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br>
+                <h3 data-translate="gold-gram-prices">أسعار الغرامات والليرات</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th data-translate="item">الصنف</th>
+                            <th data-translate="buy-price">سعر الشراء</th>
+                            <th data-translate="sell-price">سعر البيع</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td data-translate="gram-1">غرام 1</td>
+                            <td id="gram1BuyVal">--</td>
+                            <td id="gram1SellVal">--</td>
+                        </tr>
+                        <tr>
+                            <td data-translate="gram-5">غرام 5</td>
+                            <td id="gram5BuyVal">--</td>
+                            <td id="gram5SellVal">--</td>
+                        </tr>
+                        <tr>
+                            <td data-translate="gram-10">غرام 10</td>
+                            <td id="gram10BuyVal">--</td>
+                            <td id="gram10SellVal">--</td>
+                        </tr>
+                        <tr>
+                            <td data-translate="quarter-gold">ربع ليرة</td>
+                            <td id="quarterBuyVal">--</td>
+                            <td id="quarterSellVal">--</td>
+                        </tr>
+                        <tr>
+                            <td data-translate="half-gold">نصف ليرة</td>
+                            <td id="halfBuyVal">--</td>
+                            <td id="halfSellVal">--</td>
+                        </tr>
+                        <tr>
+                            <td data-translate="full-gold">ليرة كاملة</td>
+                            <td id="fullBuyVal">--</td>
+                            <td id="fullSellVal">--</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        <section id="currency-price-section">
+            <h2 class="section-title" data-translate="currency-rate-title">تصريف العملات</h2>
+            <div class="currency-rates">
+                <table>
+                    <thead>
+                        <tr>
+                            <th data-translate="currency">العملة</th>
+                            <th data-translate="buy-price">سعر الشراء</th>
+                            <th data-translate="sell-price">سعر البيع</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>دولار أمريكي</td>
+                            <td id="usdBuyVal">--</td>
+                            <td id="usdSellVal">--</td>
+                        </tr>
+                        <tr>
+                            <td>يورو</td>
+                            <td id="eurBuyVal">--</td>
+                            <td id="eurSellVal">--</td>
+                        </tr>
+                        <tr>
+                            <td>ريال سعودي</td>
+                            <td id="sarBuyVal">--</td>
+                            <td id="sarSellVal">--</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+    <footer>
+        <p data-translate="address-title">العنوان</p>
+        <p>تركيا - غازي عنتاب - شارع يلدرم</p>
+        <p>WhatsApp: <a href="https://wa.me/905389656209">+90 538 965 62 09</a> | <a href="https://wa.me/905389656209">+90 538 965 62 09</a></p>
+        <div class="footer-links">
+            <a href="#" data-translate="tiktok-link">صفحة التيكتوك</a>
+        </div>
+        <p data-translate="copyright">&copy; 2024 مصوغات الراجح. جميع الحقوق محفوظة.</p>
+    </footer>
+    <script>
+        let translations = {};
+        async function loadTranslations(lang) {
+            try {
+                const response = await fetch(`${lang}.json`);
+                translations = await response.json();
+                applyTranslations(lang);
+            } catch (error) {
+                console.error('Failed to load translations:', error);
+            }
+        }
+        function applyTranslations(lang) {
+            const elements = document.querySelectorAll('[data-translate]');
+            elements.forEach(element => {
+                const key = element.getAttribute('data-translate');
+                if (translations[key]) {
+                    element.textContent = translations[key];
+                }
+            });
+            const placeholders = document.querySelectorAll('[data-translate-placeholder]');
+            placeholders.forEach(element => {
+                const key = element.getAttribute('data-translate-placeholder');
+                if (translations[key]) {
+                    element.placeholder = translations[key];
+                }
+            });
+            document.documentElement.lang = lang;
+            document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
+        }
+        async function fetchProducts() {
+            try {
+                const response = await fetch('/api/products');
+                if (!response.ok) throw new Error('Network response was not ok');
+                const products = await response.json();
+                return products;
+            } catch (error) {
+                console.error('Failed to fetch products:', error);
+                return [];
+            }
+        }
+        async function displayProducts(containerId, productType, filterText = '', filterCarat = '', sortOrder = 'default') {
+            const products = await fetchProducts();
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            const filteredProducts = products.filter(p =>
+                p.type === productType &&
+                p.name.toLowerCase().includes(filterText.toLowerCase()) &&
+                (filterCarat === '' || p.carat === filterCarat)
+            );
+            if (sortOrder === 'price-asc') {
+                filteredProducts.sort((a, b) => a.price - b.price);
+            } else if (sortOrder === 'price-desc') {
+                filteredProducts.sort((a, b) => b.price - a.price);
+            }
+            filteredProducts.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <img src="${product.image_link}" alt="${product.name}">
+                    <div class="product-details">
+                        <h4>${product.name}</h4>
+                        <p>${product.description}</p>
+                        <p><strong>عيار:</strong> ${product.carat}</p>
+                        <p><strong>وزن:</strong> ${product.weight} غرام</p>
+                        <p><strong>سعر:</strong> ${product.price} ليرة تركية</p>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+        async function displayGoldPrices() {
+            try {
+                const response = await fetch('/api/gold-prices');
+                const goldPrices = await response.json();
+                if (goldPrices) {
+                    document.getElementById('gold21Buy').textContent = goldPrices.carat_21_buy || '--';
+                    document.getElementById('gold21Sell').textContent = goldPrices.carat_21_sell || '--';
+                    document.getElementById('gold22Buy').textContent = goldPrices.carat_22_buy || '--';
+                    document.getElementById('gold22Sell').textContent = goldPrices.carat_22_sell || '--';
+                    document.getElementById('gram1BuyVal').textContent = goldPrices.gram_1_buy || '--';
+                    document.getElementById('gram1SellVal').textContent = goldPrices.gram_1_sell || '--';
+                    document.getElementById('gram5BuyVal').textContent = goldPrices.gram_5_buy || '--';
+                    document.getElementById('gram5SellVal').textContent = goldPrices.gram_5_sell || '--';
+                    document.getElementById('gram10BuyVal').textContent = goldPrices.gram_10_buy || '--';
+                    document.getElementById('gram10SellVal').textContent = goldPrices.gram_10_sell || '--';
+                    document.getElementById('quarterBuyVal').textContent = goldPrices.quarter_gold_buy || '--';
+                    document.getElementById('quarterSellVal').textContent = goldPrices.quarter_gold_sell || '--';
+                    document.getElementById('halfBuyVal').textContent = goldPrices.half_gold_buy || '--';
+                    document.getElementById('halfSellVal').textContent = goldPrices.half_gold_sell || '--';
+                    document.getElementById('fullBuyVal').textContent = goldPrices.full_gold_buy || '--';
+                    document.getElementById('fullSellVal').textContent = goldPrices.full_gold_sell || '--';
+                }
+            } catch (error) {
+                console.error('Failed to fetch gold prices:', error);
+            }
+        }
+        async function displayCurrencyRates() {
+            try {
+                const response = await fetch('/api/currency-rates');
+                const currencyRates = await response.json();
+                if (currencyRates) {
+                    document.getElementById('usdBuyVal').textContent = currencyRates.usd_buy || '--';
+                    document.getElementById('usdSellVal').textContent = currencyRates.usd_sell || '--';
+                    document.getElementById('eurBuyVal').textContent = currencyRates.eur_buy || '--';
+                    document.getElementById('eurSellVal').textContent = currencyRates.eur_sell || '--';
+                    document.getElementById('sarBuyVal').textContent = currencyRates.sar_buy || '--';
+                    document.getElementById('sarSellVal').textContent = currencyRates.sar_sell || '--';
+                }
+            } catch (error) {
+                console.error('Failed to fetch currency rates:', error);
+            }
+        }
+        document.addEventListener('DOMContentLoaded', async () => {
+            const storedLang = localStorage.getItem('preferredLang') || 'ar';
+            document.getElementById('langSwitcher').value = storedLang;
+            await loadTranslations(storedLang);
+            displayProducts('newGoldProducts', 'new');
+            displayProducts('usedGoldProducts', 'used');
+            displayGoldPrices();
+            displayCurrencyRates();
+            document.getElementById('langSwitcher').addEventListener('change', (e) => {
+                const lang = e.target.value;
+                localStorage.setItem('preferredLang', lang);
+                loadTranslations(lang);
+                displayProducts('newGoldProducts', 'new');
+                displayProducts('usedGoldProducts', 'used');
+            });
+            document.getElementById('newGoldSearch').addEventListener('input', (e) => {
+                const filterText = e.target.value;
+                const filterCarat = document.getElementById('newGoldCaratFilter').value;
+                const sortOrder = document.getElementById('newGoldSort').value;
+                displayProducts('newGoldProducts', 'new', filterText, filterCarat, sortOrder);
+            });
+            document.getElementById('newGoldCaratFilter').addEventListener('change', (e) => {
+                const filterText = document.getElementById('newGoldSearch').value;
+                const filterCarat = e.target.value;
+                const sortOrder = document.getElementById('newGoldSort').value;
+                displayProducts('newGoldProducts', 'new', filterText, filterCarat, sortOrder);
+            });
+            document.getElementById('newGoldSort').addEventListener('change', (e) => {
+                const filterText = document.getElementById('newGoldSearch').value;
+                const filterCarat = document.getElementById('newGoldCaratFilter').value;
+                const sortOrder = e.target.value;
+                displayProducts('newGoldProducts', 'new', filterText, filterCarat, sortOrder);
+            });
+            document.getElementById('usedGoldSearch').addEventListener('input', (e) => {
+                const filterText = e.target.value;
+                const filterCarat = document.getElementById('usedGoldCaratFilter').value;
+                const sortOrder = document.getElementById('usedGoldSort').value;
+                displayProducts('usedGoldProducts', 'used', filterText, filterCarat, sortOrder);
+            });
+            document.getElementById('usedGoldCaratFilter').addEventListener('change', (e) => {
+                const filterText = document.getElementById('usedGoldSearch').value;
+                const filterCarat = e.target.value;
+                const sortOrder = document.getElementById('usedGoldSort').value;
+                displayProducts('usedGoldProducts', 'used', filterText, filterCarat, sortOrder);
+            });
+            document.getElementById('usedGoldSort').addEventListener('change', (e) => {
+                const filterText = document.getElementById('usedGoldSearch').value;
+                const filterCarat = document.getElementById('usedGoldCaratFilter').value;
+                const sortOrder = e.target.value;
+                displayProducts('usedGoldProducts', 'used', filterText, filterCarat, sortOrder);
+            });
+        });
+    </script>
+</body>
+</html>

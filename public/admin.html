@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-translate="admin-title">لوحة تحكم</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fcfbf7;
+            margin: 0;
+            color: #333;
+        }
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #fcfbf7;
+        }
+        .login-card {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #d4af37;
+        }
+        .form-section, .table-section {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="number"], textarea, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #d4af37;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #c09a24;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        table, th, td {
+            border: 1px solid #e0e0e0;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #d4af37;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container" id="loginContainer">
+        <div class="login-card">
+            <h2 data-translate="login-title">تسجيل الدخول</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username" data-translate="username-label">اسم المستخدم:</label>
+                    <input type="text" id="username" name="username" required />
+                </div>
+                <div class="form-group">
+                    <label for="password" data-translate="password-label">كلمة المرور:</label>
+                    <input type="password" id="password" name="password" required />
+                </div>
+                <button type="submit" data-translate="login-button">دخول</button>
+            </form>
+        </div>
+    </div>
+    <div class="container" id="adminPanel" style="display: none;">
+        <h1 data-translate="admin-dashboard">لوحة التحكم</h1>
+        <div class="form-section">
+            <h2 data-translate="product-management">إضافة / تعديل منتج</h2>
+            <form id="productForm">
+                <input type="hidden" id="productId">
+                <div class="form-group">
+                    <label for="productName" data-translate="product-name-label">اسم المنتج:</label>
+                    <input type="text" id="productName" required>
+                </div>
+                <div class="form-group">
+                    <label for="productImageLink" data-translate="product-image-label">رابط الصورة:</label>
+                    <input type="text" id="productImageLink" required>
+                </div>
+                <div class="form-group">
+                    <label for="productDescription" data-translate="product-description-label">الوصف:</label>
+                    <textarea id="productDescription" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="productCarat" data-translate="product-carat-label">العيار:</label>
+                    <select id="productCarat" required>
+                        <option value="21">21</option>
+                        <option value="22">22</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="productWeight" data-translate="product-weight-label">الوزن (جرام):</label>
+                    <input type="number" id="productWeight" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="productPrice" data-translate="product-price-label">السعر (ليرة تركية):</label>
+                    <input type="number" id="productPrice" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="productType" data-translate="product-type-label">النوع:</label>
+                    <select id="productType" required>
+                        <option value="new" data-translate="product-type-new">جديد</option>
+                        <option value="used" data-translate="product-type-used">مستعمل</option>
+                    </select>
+                </div>
+                <button type="submit" data-translate="product-save-button">حفظ المنتج</button>
+            </form>
+        </div>
+        <div class="table-section">
+            <h2 data-translate="existing-products">المنتجات الموجودة</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th data-translate="product-name">الاسم</th>
+                        <th data-translate="product-type">النوع</th>
+                        <th data-translate="carat">العيار</th>
+                        <th data-translate="weight">الوزن (جم)</th>
+                        <th data-translate="price">السعر (ل.ت)</th>
+                        <th data-translate="actions">الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody id="productsTableBody">
+                    </tbody>
+            </table>
+        </div>
+        <div class="form-section">
+            <h2 data-translate="gold-price-management">إدارة أسعار الذهب</h2>
+            <form id="goldPricesForm">
+                <div class="form-group">
+                    <label for="carat21Buy" data-translate="carat-21-buy-label">عيار 21 (شراء):</label>
+                    <input type="number" id="carat21Buy" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label for="carat21Sell" data-translate="carat-21-sell-label">عيار 21 (بيع):</label>
+                    <input type="number" id="carat21Sell" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label for="carat22Buy" data-translate="carat-22-buy-label">عيار 22 (شراء):</label>
+                    <input type="number" id="carat22Buy" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label for="carat22Sell" data-translate="carat-22-sell-label">عيار 22 (بيع):</label>
+                    <input type="number" id="carat22Sell" step="0.01">
+                </div>
+                <hr>
+                <div class="form-group">
+                    <label for="gram1Buy" data-translate="gram-1-buy-label">غرام 1 (شراء):</label>
+                    <input type="number" id="gram1Buy" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label for="gram1Sell" data-translate="gram-1-sell-label">غرام 1 (بيع):</label>
+                    <input type="number" id="gram1Sell" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label for="gram5Buy" data-translate="gram-5-buy-label">غرام 5 (شراء):</label>
+                    <input type="number" id="gram5Buy" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label for="gram5Sell" data-translate="gram-5-sell-label">غرام 5 (بيع):</label>
+                    <input type="number" id="gram5Sell" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label for="gram10Buy" data-translate="gram-10-buy-label">غرام 10 (شراء):</label>
+                    <input type="number" id="gram10Buy" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label for="gram10Sell" data-translate="gram-10-sell-label">غرام 10 (بيع):</label>
+                    <input type="number" id="gram10Sell" step="0.01">
+                </div>
+                <hr>
+                <div class="form-group">
+                    <label for="quarterGoldBuy" data-translate="quarter-gold-buy-label">ربع ليرة (شراء):</label>
+                    <input type="number" id="quarterGoldBuy" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label for="quarterGoldSell" data-translate="quarter-gold-sell-label">ربع ليرة (بيع):</label>
+                    <input type="number" id="quarterGoldSell" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label for="halfGoldBuy" data-translate="half-gold-buy-label">نصف ليرة (شراء):</label>
+                    <input type="number" id="halfGoldBuy" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label for="halfGoldSell" data-translate="half-gold-sell-label">نصف ليرة (بيع):</label>
+                    <input type="number" id="halfGoldSell" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label for="fullGoldBuy" data-translate="full-gold-buy-label">ليرة كاملة (شراء):</label>
+                    <input type="number" id="fullGoldBuy" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label for="fullGoldSell" data-translate="full-gold-sell-label">ليرة كاملة (بيع):</label>
+                    <input type="number" id="fullGoldSell" step="0.01">
+                </div>
+                <button type="submit" data-translate="update-gold-prices-button">تحديث أسعار الذهب</button>
+            </form>
+        </div>
+        <div class="form-section">
+            <h2 data-translate="currency-rate-management">إدارة تصريف العملات</h2>
+            <form id="currencyRatesForm">
+                <div class="form-group">
+                    <label for="usdBuy" data-translate="usd-buy-label">دولار (شراء):</label>
+                    <input type="number" id="usdBuy" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label for="usdSell" data-translate="usd-sell-label">دولار (بيع):</label>
+                    <input type="number" id="usdSell" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label for="eurBuy" data-translate="eur-buy-label">يورو (شراء):</label>
+                    <input type="number" id="eurBuy" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label for="eurSell" data-translate="eur-sell-label">يورو (بيع):</label>
+                    <input type="number" id="eurSell" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label for="sarBuy" data-translate="sar-buy-label">ريال سعودي (شراء):</label>
+                    <input type="number" id="sarBuy" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label for="sarSell" data-translate="sar-sell-label">ريال سعودي (بيع):</label>
+                    <input type="number" id="sarSell" step="0.01">
+                </div>
+                <button type="submit" data-translate="update-currency-rates-button">تحديث أسعار العملات</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const loginForm = document.getElementById('loginForm');
+            const adminPanel = document.getElementById('adminPanel');
+            const loginContainer = document.getElementById('loginContainer');
+            const productsTableBody = document.getElementById('productsTableBody');
+            const productForm = document.getElementById('productForm');
+            const goldPricesForm = document.getElementById('goldPricesForm');
+            const currencyRatesForm = document.getElementById('currencyRatesForm');
+            
+            async function loadTranslations(lang) {
+                try {
+                    const response = await fetch(`${lang}.json`);
+                    const translations = await response.json();
+                    const elements = document.querySelectorAll('[data-translate]');
+                    elements.forEach(element => {
+                        const key = element.getAttribute('data-translate');
+                        if (translations[key]) {
+                            if (element.tagName.toLowerCase() === 'input' || 
+                                element.tagName.toLowerCase() === 'textarea' || 
+                                element.tagName.toLowerCase() === 'select') {
+                                element.placeholder = translations[key];
+                            } else {
+                                element.textContent = translations[key];
+                            }
+                        }
+                    });
+                    document.documentElement.lang = lang;
+                    document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
+                } catch (error) {
+                    console.error('Failed to load translations:', error);
+                }
+            }
+            
+            const storedLang = localStorage.getItem('preferredLang') || 'ar';
+            await loadTranslations(storedLang);
+            
+            // Authentication check and display
+            const token = localStorage.getItem('authToken');
+            if (token) {
+                try {
+                    const response = await fetch('/api/products', {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+                    if (response.ok) {
+                        loginContainer.style.display = 'none';
+                        adminPanel.style.display = 'block';
+                        await loadProducts();
+                        await loadGoldPrices();
+                        await loadCurrencyRates();
+                    } else {
+                        localStorage.removeItem('authToken');
+                        alert('Session expired. Please log in again.');
+                    }
+                } catch (error) {
+                    console.error('Login check failed:', error);
+                    localStorage.removeItem('authToken');
+                }
+            }
+            
+            loginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                try {
+                    const response = await fetch('/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ username, password }),
+                    });
+                    if (response.ok) {
+                        const data = await response.json();
+                        localStorage.setItem('authToken', data.token);
+                        loginContainer.style.display = 'none';
+                        adminPanel.style.display = 'block';
+                        await loadProducts();
+                        await loadGoldPrices();
+                        await loadCurrencyRates();
+                        alert('Login successful!');
+                    } else {
+                        alert('Invalid username or password.');
+                    }
+                } catch (error) {
+                    alert('An error occurred during login.');
+                }
+            });
+            
+            async function loadProducts() {
+                const token = localStorage.getItem('authToken');
+                if (!token) return;
+                try {
+                    const response = await fetch('/api/products', {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    const products = await response.json();
+                    displayProductsTable(products);
+                } catch (error) {
+                    console.error('Failed to load products:', error);
+                }
+            }
+            
+            function displayProductsTable(products) {
+                productsTableBody.innerHTML = '';
+                products.forEach(product => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${product.name}</td>
+                        <td>${product.type}</td>
+                        <td>${product.carat}</td>
+                        <td>${product.weight}</td>
+                        <td>${product.price}</td>
+                        <td>
+                            <button onclick="editProduct(${product.id})" data-translate="edit-button">تعديل</button>
+                            <button onclick="deleteProduct(${product.id})" data-translate="delete-button">حذف</button>
+                        </td>
+                    `;
+                    productsTableBody.appendChild(row);
+                });
+                
+                // Apply translations to buttons
+                const buttons = document.querySelectorAll('[data-translate]');
+                const translations = JSON.parse(localStorage.getItem('translations') || '{}');
+                buttons.forEach(button => {
+                    const key = button.getAttribute('data-translate');
+                    if (translations[key]) {
+                        button.textContent = translations[key];
+                    }
+                });
+            }
+            
+            window.editProduct = async (id) => {
+                const token = localStorage.getItem('authToken');
+                const response = await fetch('/api/products');
+                const products = await response.json();
+                const product = products.find(p => p.id === id);
+                if (product) {
+                    document.getElementById('productId').value = product.id;
+                    document.getElementById('productName').value = product.name;
+                    document.getElementById('productImageLink').value = product.image_link;
+                    document.getElementById('productDescription').value = product.description;
+                    document.getElementById('productCarat').value = product.carat;
+                    document.getElementById('productWeight').value = product.weight;
+                    document.getElementById('productPrice').value = product.price;
+                    document.getElementById('productType').value = product.type;
+                }
+            };
+            
+            window.deleteProduct = async (id) => {
+                const token = localStorage.getItem('authToken');
+                if (!token) {
+                    const translations = JSON.parse(localStorage.getItem('translations') || '{}');
+                    alert(translations['please-login'] || 'Please log in.');
+                    return;
+                }
+                const translations = JSON.parse(localStorage.getItem('translations') || '{}');
+                const confirmMessage = translations['confirm-delete'] || 'هل أنت متأكد من حذف هذا المنتج؟';
+                
+                if (confirm(confirmMessage)) {
+                    try {
+                        const response = await fetch(`/api/products/${id}`, {
+                            method: 'DELETE',
+                            headers: { 'Authorization': `Bearer ${token}` }
+                        });
+                        if (response.ok) {
+                            const successMessage = translations['product-deleted'] || 'تم حذف المنتج بنجاح!';
+                            alert(successMessage);
+                            await loadProducts();
+                        } else {
+                            const errorMessage = translations['delete-failed'] || 'فشل حذف المنتج.';
+                            alert(errorMessage);
+                        }
+                    } catch (error) {
+                        console.error('Error deleting product:', error);
+                    }
+                }
+            };
+            
+            productForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const token = localStorage.getItem('authToken');
+                if (!token) {
+                    const translations = JSON.parse(localStorage.getItem('translations') || '{}');
+                    alert(translations['please-login'] || 'Please log in.');
+                    return;
+                }
+                
+                const formData = {
+                    name: document.getElementById('productName').value,
+                    image_link: document.getElementById('productImageLink').value,
+                    description: document.getElementById('productDescription').value,
+                    carat: document.getElementById('productCarat').value,
+                    weight: parseFloat(document.getElementById('productWeight').value),
+                    price: parseFloat(document.getElementById('productPrice').value),
+                    type: document.getElementById('productType').value,
+                };
+                
+                const currentId = document.getElementById('productId').value;
+                const url = currentId ? `/api/products/${currentId}` : '/api/products';
+                const method = currentId ? 'PUT' : 'POST';
+                
+                try {
+                    const response = await fetch(url, {
+                        method: method,
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify(formData)
+                    });
+                    
+                    if (response.ok) {
+                        const translations = JSON.parse(localStorage.getItem('translations') || '{}');
+                        const successMessage = currentId ? 
+                            (translations['product-updated'] || 'تم تحديث المنتج بنجاح!') : 
+                            (translations['product-added'] || 'تم إضافة المنتج بنجاح!');
+                        alert(successMessage);
+                        productForm.reset();
+                        document.getElementById('productId').value = '';
+                        await loadProducts();
+                    } else {
+                        const translations = JSON.parse(localStorage.getItem('translations') || '{}');
+                        const errorMessage = translations['save-failed'] || 'فشل حفظ المنتج.';
+                        alert(errorMessage);
+                    }
+                } catch (error) {
+                    console.error('Error saving product:', error);
+                    const translations = JSON.parse(localStorage.getItem('translations') || '{}');
+                    alert(translations['error'] || 'حدث خطأ.');
+                }
+            });
+            
+            async function loadGoldPrices() {
+                try {
+                    const response = await fetch('/api/gold-prices');
+                    const goldPrices = await response.json();
+                    if (goldPrices) {
+                        document.getElementById('carat21Buy').value = goldPrices.carat_21_buy;
+                        document.getElementById('carat21Sell').value = goldPrices.carat_21_sell;
+                        document.getElementById('carat22Buy').value = goldPrices.carat_22_buy;
+                        document.getElementById('carat22Sell').value = goldPrices.carat_22_sell;
+                        document.getElementById('gram1Buy').value = goldPrices.gram_1_buy;
+                        document.getElementById('gram1Sell').value = goldPrices.gram_1_sell;
+                        document.getElementById('gram5Buy').value = goldPrices.gram_5_buy;
+                        document.getElementById('gram5Sell').value = goldPrices.gram_5_sell;
+                        document.getElementById('gram10Buy').value = goldPrices.gram_10_buy;
+                        document.getElementById('gram10Sell').value = goldPrices.gram_10_sell;
+                        document.getElementById('quarterGoldBuy').value = goldPrices.quarter_gold_buy;
+                        document.getElementById('quarterGoldSell').value = goldPrices.quarter_gold_sell;
+                        document.getElementById('halfGoldBuy').value = goldPrices.half_gold_buy;
+                        document.getElementById('halfGoldSell').value = goldPrices.half_gold_sell;
+                        document.getElementById('fullGoldBuy').value = goldPrices.full_gold_buy;
+                        document.getElementById('fullGoldSell').value = goldPrices.full_gold_sell;
+                    }
+                } catch (error) {
+                    console.error('Failed to load gold prices:', error);
+                }
+            }
+            
+            goldPricesForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const token = localStorage.getItem('authToken');
+                if (!token) {
+                    const translations = JSON.parse(localStorage.getItem('translations') || '{}');
+                    alert(translations['please-login'] || 'Please log in.');
+                    return;
+                }
+                
+                const newGoldPrices = {
+                    carat_21_buy: parseFloat(document.getElementById('carat21Buy').value),
+                    carat_21_sell: parseFloat(document.getElementById('carat21Sell').value),
+                    carat_22_buy: parseFloat(document.getElementById('carat22Buy').value),
+                    carat_22_sell: parseFloat(document.getElementById('carat22Sell').value),
+                    gram_1_buy: parseFloat(document.getElementById('gram1Buy').value),
+                    gram_1_sell: parseFloat(document.getElementById('gram1Sell').value),
+                    gram_5_buy: parseFloat(document.getElementById('gram5Buy').value),
+                    gram_5_sell: parseFloat(document.getElementById('gram5Sell').value),
+                    gram_10_buy: parseFloat(document.getElementById('gram10Buy').value),
+                    gram_10_sell: parseFloat(document.getElementById('gram10Sell').value),
+                    quarter_gold_buy: parseFloat(document.getElementById('quarterGoldBuy').value),
+                    quarter_gold_sell: parseFloat(document.getElementById('quarterGoldSell').value),
+                    half_gold_buy: parseFloat(document.getElementById('halfGoldBuy').value),
+                    half_gold_sell: parseFloat(document.getElementById('halfGoldSell').value),
+                    full_gold_buy: parseFloat(document.getElementById('fullGoldBuy').value),
+                    full_gold_sell: parseFloat(document.getElementById('fullGoldSell').value),
+                };
+                
+                try {
+                    const response = await fetch('/api/gold-prices', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify(newGoldPrices)
+                    });
+                    
+                    if (response.ok) {
+                        const translations = JSON.parse(localStorage.getItem('translations') || '{}');
+                        const successMessage = translations['gold-prices-updated'] || 'تم تحديث أسعار الذهب بنجاح!';
+                        alert(successMessage);
+                        await loadGoldPrices();
+                    } else {
+                        const translations = JSON.parse(localStorage.getItem('translations') || '{}');
+                        const errorMessage = translations['gold-prices-failed'] || 'فشل تحديث أسعار الذهب.';
+                        alert(errorMessage);
+                    }
+                } catch (error) {
+                    console.error('Error updating gold prices:', error);
+                }
+            });
+            
+            async function loadCurrencyRates() {
+                try {
+                    const response = await fetch('/api/currency-rates');
+                    const currencyRates = await response.json();
+                    if (currencyRates) {
+                        document.getElementById('usdBuy').value = currencyRates.usd_buy;
+                        document.getElementById('usdSell').value = currencyRates.usd_sell;
+                        document.getElementById('eurBuy').value = currencyRates.eur_buy;
+                        document.getElementById('eurSell').value = currencyRates.eur_sell;
+                        document.getElementById('sarBuy').value = currencyRates.sar_buy;
+                        document.getElementById('sarSell').value = currencyRates.sar_sell;
+                    }
+                } catch (error) {
+                    console.error('Failed to load currency rates:', error);
+                }
+            }
+            
+            currencyRatesForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const token = localStorage.getItem('authToken');
+                if (!token) {
+                    const translations = JSON.parse(localStorage.getItem('translations') || '{}');
+                    alert(translations['please-login'] || 'Please log in.');
+                    return;
+                }
+                
+                const newCurrencyRates = {
+                    usd_buy: parseFloat(document.getElementById('usdBuy').value),
+                    usd_sell: parseFloat(document.getElementById('usdSell').value),
+                    eur_buy: parseFloat(document.getElementById('eurBuy').value),
+                    eur_sell: parseFloat(document.getElementById('eurSell').value),
+                    sar_buy: parseFloat(document.getElementById('sarBuy').value),
+                    sar_sell: parseFloat(document.getElementById('sarSell').value),
+                };
+                
+                try {
+                    const response = await fetch('/api/currency-rates', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify(newCurrencyRates)
+                    });
+                    
+                    if (response.ok) {
+                        const translations = JSON.parse(localStorage.getItem('translations') || '{}');
+                        const successMessage = translations['currency-rates-updated'] || 'تم تحديث أسعار العملات بنجاح!';
+                        alert(successMessage);
+                        await loadCurrencyRates();
+                    } else {
+                        const translations = JSON.parse(localStorage.getItem('translations') || '{}');
+                        const errorMessage = translations['currency-rates-failed'] || 'فشل تحديث أسعار العملات.';
+                        alert(errorMessage);
+                    }
+                } catch (error) {
+                    console.error('Error updating currency rates:', error);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
